@@ -25,7 +25,10 @@ def dat_file(tmp_path):
 
 class TestCLI:
     def test_help(self):
-        result = runner.invoke(app, ["--help"])
+        # Force a wide terminal so the rich-rendered help does not wrap the
+        # option name (otherwise "airport-ids" splits across lines on narrow
+        # terminals, e.g. the 80-column default in CI).
+        result = runner.invoke(app, ["--help"], env={"COLUMNS": "200"})
         assert result.exit_code == 0
         assert "airport-ids" in result.output
 

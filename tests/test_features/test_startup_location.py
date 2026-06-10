@@ -2,7 +2,6 @@ from xplane_airports.AptDat import AptDatLine
 
 from xplane_apt_convert.features import StartupLocation
 
-
 RAW_1300 = "1300 41.2870 2.0770 90.0 gate props Gate 1"
 RAW_1301_FULL = "1301 A airline_ops AA BB"
 RAW_1301_SHORT = "1301 B"

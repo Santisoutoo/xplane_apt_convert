@@ -2,7 +2,6 @@ from xplane_airports.AptDat import AptDatLine
 
 from xplane_apt_convert.features import Windsock
 
-
 RAW_LINE = "19 41.2850 2.0750 1 Test Windsock"
 
 

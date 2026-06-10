@@ -1,10 +1,7 @@
-import pytest
-
 from xplane_apt_convert.enums import (
-    FallbackEnum,
+    ApproachLighting,
     LineLightingType,
     LineType,
-    ApproachLighting,
     RunwayEndIdentifierLights,
     RunwayMarking,
     ShoulderSurfaceType,
@@ -33,6 +30,7 @@ class TestFallbackEnum:
 
     def test_unknown_value_deduplicated_in_logged_unknowns(self):
         from xplane_apt_convert.enums._fallback import logged_unknowns
+
         logged_unknowns.clear()
         SurfaceType(7777)
         SurfaceType(7777)

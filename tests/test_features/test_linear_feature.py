@@ -4,7 +4,6 @@ from xplane_apt_convert.enums import LineLightingType, LineType
 from xplane_apt_convert.features import LinearFeature
 from xplane_apt_convert.iterators import BIterator
 
-
 LINEAR_LINES = [
     "111 41.2800 2.0700 1 0",
     "115 41.2900 2.0800 1 0",
@@ -14,8 +13,10 @@ LINEAR_LINES = [
 class TestLinearFeature:
     def setup_method(self):
         header = AptDatLine("120 Test Linear Feature")
-        iterator = BIterator([AptDatLine(l) for l in LINEAR_LINES])
-        features = LinearFeature.from_row_iterator(header, iterator, bezier_resolution=4)
+        iterator = BIterator([AptDatLine(line) for line in LINEAR_LINES])
+        features = LinearFeature.from_row_iterator(
+            header, iterator, bezier_resolution=4
+        )
         assert len(features) == 1
         self.feature = features[0]
 

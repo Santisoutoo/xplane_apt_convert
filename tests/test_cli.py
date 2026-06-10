@@ -31,23 +31,56 @@ class TestCLI:
 
     def test_local_file_geojson(self, dat_file, tmp_path):
         out = tmp_path / "out"
-        result = runner.invoke(app, [
-            "-a", "LEBL", "-i", str(dat_file), "-o", str(out), "-d", "GeoJSON", "-f", "runways",
-        ])
+        result = runner.invoke(
+            app,
+            [
+                "-a",
+                "LEBL",
+                "-i",
+                str(dat_file),
+                "-o",
+                str(out),
+                "-d",
+                "GeoJSON",
+                "-f",
+                "runways",
+            ],
+        )
         assert result.exit_code == 0
         assert (out / "LEBL.runways.geojson").exists()
 
     def test_feature_subset(self, dat_file, tmp_path):
         out = tmp_path / "out"
-        runner.invoke(app, [
-            "-a", "LEBL", "-i", str(dat_file), "-o", str(out), "-d", "GeoJSON", "-f", "runways",
-        ])
+        runner.invoke(
+            app,
+            [
+                "-a",
+                "LEBL",
+                "-i",
+                str(dat_file),
+                "-o",
+                str(out),
+                "-d",
+                "GeoJSON",
+                "-f",
+                "runways",
+            ],
+        )
         assert not (out / "LEBL.windsocks.geojson").exists()
 
     def test_both_input_options_raises(self, dat_file, tmp_path):
-        result = runner.invoke(app, [
-            "-a", "LEBL", "-i", str(dat_file), "-g", "-o", str(tmp_path),
-        ])
+        result = runner.invoke(
+            app,
+            [
+                "-a",
+                "LEBL",
+                "-i",
+                str(dat_file),
+                "-g",
+                "-o",
+                str(tmp_path),
+            ],
+        )
         assert result.exit_code != 0
 
     def test_no_input_raises(self, tmp_path):
@@ -55,7 +88,15 @@ class TestCLI:
         assert result.exit_code != 0
 
     def test_airport_not_found_aborts(self, dat_file, tmp_path):
-        result = runner.invoke(app, [
-            "-a", "XXXX", "-i", str(dat_file), "-o", str(tmp_path),
-        ])
+        result = runner.invoke(
+            app,
+            [
+                "-a",
+                "XXXX",
+                "-i",
+                str(dat_file),
+                "-o",
+                str(tmp_path),
+            ],
+        )
         assert result.exit_code != 0

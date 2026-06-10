@@ -24,7 +24,6 @@ from .features import (
 from .geometry import _DEFAULT_BEZIER_RESOLUTION
 from .iterators import BIterator
 
-
 logging.basicConfig(
     level=logging.INFO,
     format="%(message)s",
@@ -236,13 +235,13 @@ class ParsedAirport:
             part_type_origin = get_origin(part_type)
             part_type_args = get_args(part_type)
 
-            part_is_list = get_origin(part_type) == list
+            part_is_list = get_origin(part_type) is list
 
-            if part_type_origin == list:
+            if part_type_origin is list:
                 part_is_list = True
                 schema = part_type_args[0]._schema()
-            elif part_type_origin == Union:
-                assert len(part_type_args) == 2 and part_type_args[1] == type(
+            elif part_type_origin is Union:
+                assert len(part_type_args) == 2 and part_type_args[1] is type(
                     None
                 )  # Only Unions equivalent to Optional are valid.
 

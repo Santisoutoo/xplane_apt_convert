@@ -48,8 +48,14 @@ class TestDetectDriver:
 class TestSupportedDrivers:
     def test_all_eight_drivers_present(self):
         expected = {
-            "ESRI Shapefile", "FlatGeobuf", "GeoJSON", "GeoJSONSeq",
-            "GPKG", "GML", "OGR_GMT", "SQLite",
+            "ESRI Shapefile",
+            "FlatGeobuf",
+            "GeoJSON",
+            "GeoJSONSeq",
+            "GPKG",
+            "GML",
+            "OGR_GMT",
+            "SQLite",
         }
         assert set(SUPPORTED_DRIVERS.keys()) == expected
 
@@ -73,6 +79,13 @@ class TestValidFeatures:
         assert len(VALID_FEATURES) == 7
 
     def test_contains_expected(self):
-        for name in ["boundary", "runways", "startup_locations", "windsocks",
-                     "signs", "pavements", "linear_features"]:
+        for name in [
+            "boundary",
+            "runways",
+            "startup_locations",
+            "windsocks",
+            "signs",
+            "pavements",
+            "linear_features",
+        ]:
             assert name in VALID_FEATURES

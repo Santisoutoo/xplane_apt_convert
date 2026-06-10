@@ -1,6 +1,5 @@
 from pathlib import Path
 
-
 SUPPORTED_DRIVERS = {
     "ESRI Shapefile": {
         "multilayer": False,

@@ -4,7 +4,6 @@ from xplane_apt_convert.enums import SurfaceType
 from xplane_apt_convert.features import Pavement
 from xplane_apt_convert.iterators import BIterator
 
-
 PAVEMENT_LINES = [
     "111 41.2800 2.0700 0 0",
     "111 41.2900 2.0700 0 0",
@@ -16,8 +15,10 @@ PAVEMENT_LINES = [
 class TestPavement:
     def setup_method(self):
         header = AptDatLine("110 1 0.25 0.0 Test Pavement")
-        iterator = BIterator([AptDatLine(l) for l in PAVEMENT_LINES])
-        self.pavement = Pavement.from_row_iterator(header, iterator, bezier_resolution=4)
+        iterator = BIterator([AptDatLine(line) for line in PAVEMENT_LINES])
+        self.pavement = Pavement.from_row_iterator(
+            header, iterator, bezier_resolution=4
+        )
 
     def test_surface_type(self):
         assert self.pavement.surface_type == SurfaceType.ASPHALT

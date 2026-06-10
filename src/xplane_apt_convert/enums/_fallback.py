@@ -1,7 +1,6 @@
 import logging
 from enum import Enum, EnumMeta
 
-
 logger = logging.getLogger("xplane_apt_convert")
 
 logged_unknowns = set()
@@ -14,7 +13,10 @@ class FallbackEnumMeta(EnumMeta):
 
     def __call__(cls, value, names=None, *args, **kwargs):
         try:
-            return EnumMeta.__call__(cls, value, names=None, *args, **kwargs)
+            # Do not forward `names` on a value lookup: from Python 3.12 on,
+            # EnumMeta.__call__(cls, value, names=None) is interpreted as a
+            # lookup for the tuple (value, None) and wrongly raises ValueError.
+            return EnumMeta.__call__(cls, value, *args, **kwargs)
         except ValueError:
             if names is not None:
                 # using functional API attempting to create a new Enum type

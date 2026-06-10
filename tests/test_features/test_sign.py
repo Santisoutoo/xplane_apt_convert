@@ -3,7 +3,6 @@ from xplane_airports.AptDat import AptDatLine
 from xplane_apt_convert.enums import SignSize
 from xplane_apt_convert.features import Sign
 
-
 RAW_LINE = "20 41.2860 2.0760 180.0 0 1 {A-1}"
 
 

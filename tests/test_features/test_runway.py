@@ -3,7 +3,6 @@ from xplane_airports.AptDat import AptDatLine
 from xplane_apt_convert.enums import SurfaceType
 from xplane_apt_convert.features import Runway
 
-
 RAW_LINE = "100 45.00 1 0 0.25 1 3 1 09L 41.2800 2.0700 0 0 0 0 0 0 27R 41.2900 2.0900 0 0 0 0 0 0"
 
 

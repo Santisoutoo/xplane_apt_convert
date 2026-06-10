@@ -3,7 +3,6 @@ from xplane_airports.AptDat import AptDatLine
 from xplane_apt_convert.features import Boundary
 from xplane_apt_convert.iterators import BIterator
 
-
 BOUNDARY_LINES = [
     "111 41.2750 2.0650",
     "111 41.2950 2.0650",
@@ -15,8 +14,10 @@ BOUNDARY_LINES = [
 class TestBoundary:
     def setup_method(self):
         header = AptDatLine("130 Test Boundary")
-        iterator = BIterator([AptDatLine(l) for l in BOUNDARY_LINES])
-        self.boundary = Boundary.from_row_iterator(header, iterator, bezier_resolution=4)
+        iterator = BIterator([AptDatLine(line) for line in BOUNDARY_LINES])
+        self.boundary = Boundary.from_row_iterator(
+            header, iterator, bezier_resolution=4
+        )
 
     def test_name(self):
         assert self.boundary.name == "Test Boundary"

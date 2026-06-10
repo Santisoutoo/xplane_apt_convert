@@ -31,6 +31,7 @@ I
 @pytest.fixture
 def apt_dat():
     from xplane_airports.AptDat import AptDat
+
     return AptDat.from_file_text(MINIMAL_APT_DAT, "test.dat")
 
 
@@ -42,4 +43,5 @@ def airport(apt_dat):
 @pytest.fixture
 def parsed_airport(airport):
     from xplane_apt_convert import ParsedAirport
+
     return ParsedAirport(airport)

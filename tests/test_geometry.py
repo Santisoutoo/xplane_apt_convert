@@ -5,7 +5,7 @@ from xplane_apt_convert.iterators import BIterator
 
 
 def make_iter(lines):
-    return BIterator([AptDatLine(l) for l in lines])
+    return BIterator([AptDatLine(line) for line in lines])
 
 
 class TestGetPaths:
@@ -17,12 +17,14 @@ class TestGetPaths:
         assert coords[0][-1] == (2.08, 41.29)
 
     def test_simple_polygon_ring(self):
-        it = make_iter([
-            "111 41.28 2.07",
-            "111 41.29 2.07",
-            "111 41.29 2.08",
-            "113 41.28 2.08",
-        ])
+        it = make_iter(
+            [
+                "111 41.28 2.07",
+                "111 41.29 2.07",
+                "111 41.29 2.08",
+                "113 41.28 2.08",
+            ]
+        )
         coords, _ = get_paths(it, bezier_resolution=4, mode="polygon")
         assert len(coords) == 1
         assert len(coords[0]) >= 3
@@ -49,11 +51,13 @@ class TestGetPaths:
         assert len(coords) == len(props)
 
     def test_line_type_change_splits_segment(self):
-        it = make_iter([
-            "111 41.28 2.07 1 0",
-            "111 41.29 2.08 2 0",  # different painted_line_type → new segment
-            "115 41.30 2.09 2 0",
-        ])
+        it = make_iter(
+            [
+                "111 41.28 2.07 1 0",
+                "111 41.29 2.08 2 0",  # different painted_line_type → new segment
+                "115 41.30 2.09 2 0",
+            ]
+        )
         coords, props = get_paths(it, bezier_resolution=4, mode="line")
         assert len(coords) == 2
         assert props[0]["painted_line_type"] == 1

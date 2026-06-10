@@ -1,4 +1,5 @@
 import pytest
+from typer.main import get_command
 from typer.testing import CliRunner
 
 from xplane_apt_convert.cli import app
@@ -27,27 +28,69 @@ class TestCLI:
     def test_help(self):
         result = runner.invoke(app, ["--help"])
         assert result.exit_code == 0
-        assert "airport-ids" in result.output
+
+        # Assert the option is registered via introspection rather than scraping
+        # the rich-rendered help text: that output wraps option names depending
+        # on the terminal width (e.g. CI's narrow default), which would split
+        # "--airport-ids" across lines and make a substring check flaky.
+        command = get_command(app)
+        option_names = {
+            opt for param in command.params for opt in getattr(param, "opts", [])
+        }
+        assert "--airport-ids" in option_names
 
     def test_local_file_geojson(self, dat_file, tmp_path):
         out = tmp_path / "out"
-        result = runner.invoke(app, [
-            "-a", "LEBL", "-i", str(dat_file), "-o", str(out), "-d", "GeoJSON", "-f", "runways",
-        ])
+        result = runner.invoke(
+            app,
+            [
+                "-a",
+                "LEBL",
+                "-i",
+                str(dat_file),
+                "-o",
+                str(out),
+                "-d",
+                "GeoJSON",
+                "-f",
+                "runways",
+            ],
+        )
         assert result.exit_code == 0
         assert (out / "LEBL.runways.geojson").exists()
 
     def test_feature_subset(self, dat_file, tmp_path):
         out = tmp_path / "out"
-        runner.invoke(app, [
-            "-a", "LEBL", "-i", str(dat_file), "-o", str(out), "-d", "GeoJSON", "-f", "runways",
-        ])
+        runner.invoke(
+            app,
+            [
+                "-a",
+                "LEBL",
+                "-i",
+                str(dat_file),
+                "-o",
+                str(out),
+                "-d",
+                "GeoJSON",
+                "-f",
+                "runways",
+            ],
+        )
         assert not (out / "LEBL.windsocks.geojson").exists()
 
     def test_both_input_options_raises(self, dat_file, tmp_path):
-        result = runner.invoke(app, [
-            "-a", "LEBL", "-i", str(dat_file), "-g", "-o", str(tmp_path),
-        ])
+        result = runner.invoke(
+            app,
+            [
+                "-a",
+                "LEBL",
+                "-i",
+                str(dat_file),
+                "-g",
+                "-o",
+                str(tmp_path),
+            ],
+        )
         assert result.exit_code != 0
 
     def test_no_input_raises(self, tmp_path):
@@ -55,7 +98,15 @@ class TestCLI:
         assert result.exit_code != 0
 
     def test_airport_not_found_aborts(self, dat_file, tmp_path):
-        result = runner.invoke(app, [
-            "-a", "XXXX", "-i", str(dat_file), "-o", str(tmp_path),
-        ])
+        result = runner.invoke(
+            app,
+            [
+                "-a",
+                "XXXX",
+                "-i",
+                str(dat_file),
+                "-o",
+                str(tmp_path),
+            ],
+        )
         assert result.exit_code != 0

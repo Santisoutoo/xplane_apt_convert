@@ -46,7 +46,7 @@ name = "Carlos Bergillos"
 email = "c.bergillos.v@gmail.com"
 
 [project.optional-dependencies]
-dev = ["pytest"]
+dev = ["pytest", "pytest-cov", "ruff"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -56,3 +56,22 @@ where = ["src"]
 
 [tool.setuptools.dynamic]
 version = { attr = "xplane_apt_convert.__version__" }
+
+[tool.ruff]
+line-length = 88
+target-version = "py39"
+src = ["src", "tests"]
+extend-exclude = ["images"]  # script auxiliar de generación de imágenes, no es código del paquete
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]  # pycodestyle, pyflakes, warnings, orden de imports
+# El formateador (ruff format) es la fuente de verdad de la longitud de línea;
+# E501 solo dejaría errores en strings/comentarios que el formateador no puede partir.
+ignore = ["E501"]
+
+[tool.coverage.run]
+source = ["xplane_apt_convert"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true

@@ -1,4 +1,5 @@
 import json
+
 import pytest
 
 
@@ -58,7 +59,9 @@ class TestParsedAirportExport:
         parsed_airport.export(out, driver="GPKG", features=["runways", "windsocks"])
         assert out.exists()
 
-    def test_export_feature_subset_only_creates_requested_files(self, parsed_airport, tmp_path):
+    def test_export_feature_subset_only_creates_requested_files(
+        self, parsed_airport, tmp_path
+    ):
         out = tmp_path / "LEBL.geojson"
         parsed_airport.export(out, driver="GeoJSON", features=["runways"])
         assert (tmp_path / "LEBL.runways.geojson").exists()
@@ -77,13 +80,26 @@ class TestParsedAirportExport:
         parsed_airport.export(out, features=["runways"])
         assert (tmp_path / "LEBL.runways.geojson").exists()
 
-    def test_export_unknown_extension_without_driver_raises(self, parsed_airport, tmp_path):
+    def test_export_unknown_extension_without_driver_raises(
+        self, parsed_airport, tmp_path
+    ):
         with pytest.raises(ValueError):
             parsed_airport.export(tmp_path / "LEBL.xyz", features=["runways"])
 
     def test_export_crs_transform_changes_coordinates(self, parsed_airport, tmp_path):
-        parsed_airport.export(tmp_path / "a.geojson", driver="GeoJSON", features=["runways"])
-        parsed_airport.export(tmp_path / "b.geojson", driver="GeoJSON", features=["runways"], crs="EPSG:3857")
-        coords_4326 = json.loads((tmp_path / "a.runways.geojson").read_text())["features"][0]["geometry"]["coordinates"][0]
-        coords_3857 = json.loads((tmp_path / "b.runways.geojson").read_text())["features"][0]["geometry"]["coordinates"][0]
+        parsed_airport.export(
+            tmp_path / "a.geojson", driver="GeoJSON", features=["runways"]
+        )
+        parsed_airport.export(
+            tmp_path / "b.geojson",
+            driver="GeoJSON",
+            features=["runways"],
+            crs="EPSG:3857",
+        )
+        coords_4326 = json.loads((tmp_path / "a.runways.geojson").read_text())[
+            "features"
+        ][0]["geometry"]["coordinates"][0]
+        coords_3857 = json.loads((tmp_path / "b.runways.geojson").read_text())[
+            "features"
+        ][0]["geometry"]["coordinates"][0]
         assert coords_4326 != coords_3857

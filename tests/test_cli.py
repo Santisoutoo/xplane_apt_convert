@@ -1,4 +1,5 @@
 import pytest
+from typer.main import get_command
 from typer.testing import CliRunner
 
 from xplane_apt_convert.cli import app
@@ -25,12 +26,18 @@ def dat_file(tmp_path):
 
 class TestCLI:
     def test_help(self):
-        # Force a wide terminal so the rich-rendered help does not wrap the
-        # option name (otherwise "airport-ids" splits across lines on narrow
-        # terminals, e.g. the 80-column default in CI).
-        result = runner.invoke(app, ["--help"], env={"COLUMNS": "200"})
+        result = runner.invoke(app, ["--help"])
         assert result.exit_code == 0
-        assert "airport-ids" in result.output
+
+        # Assert the option is registered via introspection rather than scraping
+        # the rich-rendered help text: that output wraps option names depending
+        # on the terminal width (e.g. CI's narrow default), which would split
+        # "--airport-ids" across lines and make a substring check flaky.
+        command = get_command(app)
+        option_names = {
+            opt for param in command.params for opt in getattr(param, "opts", [])
+        }
+        assert "--airport-ids" in option_names
 
     def test_local_file_geojson(self, dat_file, tmp_path):
         out = tmp_path / "out"
